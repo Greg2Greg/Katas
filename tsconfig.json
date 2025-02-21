@@ -1,0 +1,62 @@
+{
+    "compilerOptions": {
+      /* Projects */
+      "incremental": true,
+      "disableReferencedProjectLoad": false,
+  
+      /* Language and Environment */
+      "target": "ES6",
+      "moduleDetection": "auto",
+  
+      /* Modules */
+      "module":"NodeNext",
+      "moduleResolution": "Node16",
+      "resolveJsonModule": true,
+      "allowImportingTsExtensions": true,
+  
+      /* JavaScript Support */
+      "allowJs": false,
+  
+      /* Emit */
+      //"sourceMap": true /* Through ESBuild */,
+      //"removeComments": true /* Through ESBuild */,
+      "noEmit": true /* Through ESBuild */,
+      "downlevelIteration": true,
+      "preserveConstEnums": true,
+      "rootDirs": ["src", "tests"],
+      "outDir": "./dist",
+      "declaration": true,
+      "declarationDir": "./lib",
+  
+      /* Interop Constraints */
+      "isolatedModules": true,
+      "allowSyntheticDefaultImports": true,
+      "esModuleInterop": true,
+      "forceConsistentCasingInFileNames": true,
+  
+      /* Type Checking */
+      "noImplicitAny": true,
+      "strictNullChecks": false,
+      "strictFunctionTypes": true,
+      "strictBindCallApply": true,
+      "noImplicitThis": true,
+      "alwaysStrict": true,
+      "noUnusedLocals": false,
+      "noUnusedParameters": false,
+      "noImplicitReturns": true,
+      "noFallthroughCasesInSwitch": true,
+      "noUncheckedIndexedAccess": true,
+      "noImplicitOverride": true,
+      "allowUnusedLabels": false,
+      "allowUnreachableCode": false,
+      "noStrictGenericChecks": false,
+  
+      /* Output formatting */
+      "pretty": true,
+  
+      /* Completeness */
+      "skipLibCheck": true
+    },
+    "exclude": ["node_modules", "android/**/build", "dist", "lib", ".env", "coverage", ".vscode"]
+  }
+  

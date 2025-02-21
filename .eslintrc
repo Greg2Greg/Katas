@@ -1,0 +1,42 @@
+{
+    "root": true,
+    "parserOptions": {
+      "ecmaVersion": "latest"
+    },
+    "plugins": ["prettier", "import"],
+    "overrides": [
+      {
+        "files": [
+          "*.ts"
+        ],
+        "extends": [
+          "eslint:recommended",
+          "plugin:@typescript-eslint/recommended",
+          "plugin:import/typescript"
+        ],
+        "rules": {
+          "curly": "error",
+          "import/newline-after-import": "error",
+          "import/no-duplicates": ["error"],
+          "import/order": [
+            "error",
+            {
+              "newlines-between": "never",
+              "groups": ["external", "builtin", "internal", "index", ["sibling", "parent"], "object"]
+            }
+          ],
+          "import/no-cycle": "error",
+          "import/no-self-import": "error",
+          "import/no-useless-path-segments": "error",
+          "prettier/prettier": ["error"]
+        }
+      },
+      {
+        "files": [
+          "*.html"
+        ],
+        "rules": {}
+      }
+    ]
+  }
+  
