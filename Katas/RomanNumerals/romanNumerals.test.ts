@@ -1,13 +1,35 @@
-import { RomanNumerals } from './romanNumerals.ts';
+import { RomanNumeralsV2 } from './romanNumeralsV2.ts';
 
-describe('Roman numerals', () => {
-  const romanNumerals = new RomanNumerals();
+const romanNumerals = new RomanNumeralsV2();
+describe('Decimal to roman numerals', () => {
+  it('Should return I when 1', () => {
+    const decimal = 1;
+
+    const romanNumeral = romanNumerals.convertDecimalToRomanNumeral(decimal);
+
+    expect(romanNumeral).toBe('I');
+  });
+  it('Should return II when 2', () => {
+    const decimal = 2;
+
+    const romanNumeral = romanNumerals.convertDecimalToRomanNumeral(decimal);
+
+    expect(romanNumeral).toBe('II');
+  });
   it('Should return III when 3', () => {
     const decimal = 3;
 
     const romanNumeral = romanNumerals.convertDecimalToRomanNumeral(decimal);
 
     expect(romanNumeral).toBe('III');
+  });
+  // On ne peut pas parler de 4 sans la notion de 5, d'où ce test en premier
+  it('Should return V when 5', () => {
+    const decimal = 5;
+
+    const romanNumeral = romanNumerals.convertDecimalToRomanNumeral(decimal);
+
+    expect(romanNumeral).toBe('V');
   });
   it('Should return IV when 4', () => {
     const decimal = 4;
@@ -16,6 +38,7 @@ describe('Roman numerals', () => {
 
     expect(romanNumeral).toBe('IV');
   });
+
   it('Should return IX when 9', () => {
     const decimal = 9;
 
