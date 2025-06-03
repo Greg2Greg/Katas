@@ -5,5 +5,6 @@ export default async (): Promise<Config> => {
     transform: {
       '^.+\\.(ts|tsx)$': 'ts-jest',
     },
+    reporters: [['summary', { summaryThreshold: 1 }]],
   };
 };

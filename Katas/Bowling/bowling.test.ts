@@ -1,119 +1,227 @@
-export class BowlingGame {
-  private MAX_ROLLS = 21;
-  private MAX_PINES = 10;
-  private MAX_FRAMES = 10;
-  private SPARE_POINTS = 10;
-  private STRIKE_POINTS = 10;
+import { BowlingGameV2 } from './BowlingGameV2/bowlingGameV2.ts';
 
-  private rolls = new Array<number>(this.MAX_ROLLS);
-  private currentRoll = 0;
-
-  roll(pinsKnockedDown: number): void {
-    if (pinsKnockedDown > this.MAX_PINES) {
-      throw new Error(`Max pins is ${this.MAX_PINES}`);
-    }
-
-    this.rolls[this.currentRoll++] = pinsKnockedDown;
-  }
-
-  score(): number {
-    let score = 0;
-    let rollIndex = 0;
-
-    for (let frameIndex = 0; frameIndex < this.MAX_FRAMES; frameIndex++) {
-      const frameRollOne = this.rolls[rollIndex];
-
-      if (frameRollOne === this.STRIKE_POINTS) {
-        const firstBonusRoll = this.rolls[rollIndex + 1];
-        const secondBonusRoll = this.rolls[rollIndex + 2];
-        score += this.STRIKE_POINTS + firstBonusRoll + secondBonusRoll;
-
-        rollIndex++;
-        continue;
-      }
-
-      const frameRollTwo = this.rolls[rollIndex + 1];
-      const isSpare = frameRollOne + frameRollTwo === this.SPARE_POINTS;
-
-      if (isSpare) {
-        const bonusRoll = this.rolls[rollIndex + 2];
-        score += this.SPARE_POINTS + bonusRoll;
-
-        rollIndex = rollIndex + 2;
-        continue;
-      }
-
-      rollIndex = rollIndex + 2;
-      score += frameRollOne + frameRollTwo;
-    }
-
-    return score;
-  }
-}
-
-function rollMany(game: BowlingGame, numberOfRoll: number, pinsToKnock: number): void {
-  for (let i = 0; i < numberOfRoll; i++) {
-    game.roll(pinsToKnock);
+function rollMany(
+  game: BowlingGameV2,
+  pinsDown: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 = 0,
+  count: number
+) {
+  for (let i = 0; i < count; i++) {
+    game.roll(pinsDown);
   }
 }
 
 describe('Bowling', () => {
-  let game: BowlingGame;
+  let bowlingGame: BowlingGameV2;
 
   beforeEach(() => {
-    game = new BowlingGame();
+    bowlingGame = new BowlingGameV2();
   });
-  it('Should handle scoring with no spare and no strike, all rolls made 0', () => {
-    rollMany(game, 20, 0);
-    expect(game.score()).toBe(0);
+  it('Game hasnt started', () => {
+    expect(bowlingGame.getCurrentScore()).toEqual([]);
   });
-  it('Should handle scoring with no spare and no strike, all rolls made 1', () => {
-    rollMany(game, 20, 1);
-    expect(game.score()).toBe(20);
+  it('First roll without strike', () => {
+    bowlingGame.roll(4);
+
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 4,
+        score: 'WAITING_ON_NEXT_ROLLS',
+      },
+    ]);
   });
-  it('Should handle a single spare', () => {
-    // Frame 1 : 10 + 3
-    game.roll(5);
-    game.roll(5);
+  it('First 2 classic rolls', () => {
+    bowlingGame.roll(4);
+    bowlingGame.roll(4);
 
-    // Frame 2 : 3
-    game.roll(3);
-
-    rollMany(game, 17, 0);
-
-    expect(game.score()).toBe(16);
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 4,
+        secondRoll: 4,
+        score: 8,
+      },
+    ]);
   });
-  it('Should handle a double spare', () => {
-    // Frame 1 : 10 + 3 = 13
-    game.roll(5);
-    game.roll(5);
+  it('First 2 rolls with spare', () => {
+    bowlingGame.roll(5);
+    bowlingGame.roll(5);
 
-    // Frame 2 : 10 + 5 = 15
-    game.roll(3);
-    game.roll(7);
-
-    // Frame 3 = 5
-    game.roll(5);
-
-    rollMany(game, 15, 0);
-
-    expect(game.score()).toBe(33);
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 5,
+        secondRoll: 5,
+        score: 'WAITING_ON_NEXT_ROLLS',
+      },
+    ]);
   });
-  it('Should handle a strike', () => {
-    // Frame 1 : 10 + 5 + 3
-    game.roll(10);
+  it('First 2 rolls with spare and anoter classic roll', () => {
+    bowlingGame.roll(5);
+    bowlingGame.roll(5);
+    bowlingGame.roll(4);
 
-    // Frame 2 : 8
-    game.roll(5);
-    game.roll(3);
-
-    rollMany(game, 17, 0);
-
-    expect(game.score()).toBe(26);
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 5,
+        secondRoll: 5,
+        score: 14,
+      },
+      {
+        firstRoll: 4,
+        score: 'WAITING_ON_NEXT_ROLLS',
+      },
+    ]);
   });
-  it('Should handle the best score scenario', () => {
-    rollMany(game, 12, 10);
+  it('First roll strike', () => {
+    bowlingGame.roll(10);
 
-    expect(game.score()).toBe(300);
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 10,
+        score: 'WAITING_ON_NEXT_ROLLS',
+      },
+    ]);
+  });
+  it('First 3 rolls strike', () => {
+    bowlingGame.roll(10);
+    bowlingGame.roll(10);
+    bowlingGame.roll(10);
+
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 'WAITING_ON_NEXT_ROLLS',
+      },
+      {
+        firstRoll: 10,
+        score: 'WAITING_ON_NEXT_ROLLS',
+      },
+    ]);
+  });
+  it('Should be able to roll one more time on last frame if spare', () => {
+    rollMany(bowlingGame, 0, 18);
+    bowlingGame.roll(5);
+    bowlingGame.roll(5);
+    bowlingGame.roll(5);
+
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 0,
+        secondRoll: 0,
+        score: 0,
+      },
+      {
+        firstRoll: 5,
+        secondRoll: 5,
+        thirdRoll: 5,
+        score: 15,
+      },
+    ]);
+  });
+  it('Should not be able to roll the bonus if no spare nor strike', () => {
+    rollMany(bowlingGame, 0, 18);
+    bowlingGame.roll(5);
+    bowlingGame.roll(4);
+
+    expect(() => bowlingGame.roll(5)).toThrow('Game is completed');
+  });
+  it('Should throw if trying to roll one more time after 10th frame bonus', () => {
+    rollMany(bowlingGame, 0, 18);
+    bowlingGame.roll(5);
+    bowlingGame.roll(5);
+    bowlingGame.roll(5);
+
+    expect(() => bowlingGame.roll(5)).toThrow('Game is completed');
+  });
+
+  it('Should be able to do the perfect scenario', () => {
+    rollMany(bowlingGame, 10, 12);
+
+    expect(bowlingGame.getCurrentScore()).toEqual([
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        score: 30,
+      },
+      {
+        firstRoll: 10,
+        secondRoll: 10,
+        thirdRoll: 10,
+        score: 30,
+      },
+    ]);
   });
 });

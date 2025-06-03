@@ -1,2 +1,4 @@
 node_modules
 .vscode
+Katas/TDDPlayground/tddPlayground.ts
+Katas/TDDPlayground/tddPlayground.test.ts
