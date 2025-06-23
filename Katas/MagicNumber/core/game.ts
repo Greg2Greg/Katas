@@ -49,7 +49,7 @@ export class Game {
   private async guess(): Promise<void> {
     const inputNumber = await this.inputer.read();
 
-    if (inputNumber === 'NOT_A_VALID_NUMBER') {
+    if (inputNumber === 'NOT_A_VALID_NUMBER' || inputNumber == null) {
       this.outputer.log('NOT_A_VALID_NUMBER');
       return;
     }

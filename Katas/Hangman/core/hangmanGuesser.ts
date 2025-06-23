@@ -83,7 +83,8 @@ export class HangmanGuesser implements HangmanObservable {
       this.hangmanProgress =
         this.hangmanProgress.substring(0, indexes[i]) +
         letter +
-        this.hangmanProgress.substring(indexes[i] + 1);
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        this.hangmanProgress.substring(indexes[i]! + 1);
     }
   }
 

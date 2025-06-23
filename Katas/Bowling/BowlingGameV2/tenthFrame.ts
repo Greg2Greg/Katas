@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { IFrameObserver, IFrame, IObservableFrame, FrameScore } from './models.ts';
 
 export class TenthFrame implements IFrame, IObservableFrame {
@@ -45,18 +46,18 @@ export class TenthFrame implements IFrame, IObservableFrame {
 
       case 'WAIT_ON_SECOND_SHOT':
         return {
-          firstRoll: this.rolls[0],
+          firstRoll: this.rolls[0]!,
           score: this.score(),
         };
       case 'WAIT_ON_BONUS_SHOT':
         return {
-          firstRoll: this.rolls[0],
+          firstRoll: this.rolls[0]!,
           secondRoll: this.rolls[1],
           score: this.score(),
         };
       case 'COMPLETED':
         return {
-          firstRoll: this.rolls[0],
+          firstRoll: this.rolls[0]!,
           secondRoll: this.rolls[1],
           thirdRoll: this.rolls[2],
           score: this.score(),
@@ -82,7 +83,7 @@ export class TenthFrame implements IFrame, IObservableFrame {
       case 'WAIT_ON_BONUS_SHOT':
         return 'WAITING_ON_NEXT_ROLLS';
       case 'COMPLETED':
-        return this.rolls[0] + this.rolls[1] + this.rolls[2];
+        return this.rolls[0]! + this.rolls[1]! + this.rolls[2]!;
     }
   }
 
@@ -93,7 +94,7 @@ export class TenthFrame implements IFrame, IObservableFrame {
 
   private handleSecondShot(pinsDown: number) {
     this.rolls.push(pinsDown);
-    const score = this.rolls[0] + this.rolls[1];
+    const score = this.rolls[0]! + this.rolls[1]!;
 
     if (score >= 10) {
       this.state = 'WAIT_ON_BONUS_SHOT';

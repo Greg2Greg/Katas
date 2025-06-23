@@ -9,14 +9,15 @@ export class Stack<T> {
     this._elements.push(element);
   }
 
-  pop(): T {
+  pop(): T | undefined {
     if (this._elements.length === 0) {
       return undefined;
     }
+
     return this._elements.pop();
   }
 
-  peek(): T {
+  peek(): T | undefined {
     return this._elements[this._elements.length - 1];
   }
 }

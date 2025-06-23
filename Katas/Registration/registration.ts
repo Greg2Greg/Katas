@@ -15,7 +15,7 @@ type Account = {
 
 export interface UserRepository {
   save(account: Account): Promise<void>;
-  findByEmailAddress(emailAddress: string): Promise<Account>;
+  findByEmailAddress(emailAddress: string): Promise<Account | null>;
   isEmailAddressAvailable(emailAddress: string): Promise<boolean>;
 }
 
@@ -26,8 +26,13 @@ export class InmemoryUserRepository implements UserRepository {
     this.users.set(account.emailAddress, account);
   }
 
-  async findByEmailAddress(emailAddress: string): Promise<Account> {
-    return this.users.get(emailAddress);
+  async findByEmailAddress(emailAddress: string): Promise<Account | null> {
+    const user = this.users.get(emailAddress);
+
+    if (!user) {
+      return null;
+    }
+    return user;
   }
 
   async isEmailAddressAvailable(emailAddress: string): Promise<boolean> {

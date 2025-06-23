@@ -5,9 +5,14 @@ export class InmemoryInputer implements Inputer {
     this.numbersReturned = numbersReturned;
   }
 
-  read(): Promise<number> {
+  async read(): Promise<number | null> {
     const numberToReturn = this.numbersReturned[0];
     this.numbersReturned.shift();
-    return Promise.resolve(numberToReturn);
+
+    if (!numberToReturn) {
+      return null;
+    }
+
+    return numberToReturn;
   }
 }

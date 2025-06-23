@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import { IFrame, IObservableFrame, IFrameObserver, FrameScore, IBonusFrame } from './models.ts';
 
 export class ClassicFrame implements IFrame, IObservableFrame, IBonusFrame {
@@ -32,18 +33,18 @@ export class ClassicFrame implements IFrame, IObservableFrame, IBonusFrame {
         return { firstRoll: 0, score: this.score() };
       case 'NOT_FINISHED':
         return {
-          firstRoll: this.rolls[0],
+          firstRoll: this.rolls[0]!,
           score: this.score(),
         };
       case 'CLASSIC':
         return {
-          firstRoll: this.rolls[0],
+          firstRoll: this.rolls[0]!,
           secondRoll: this.rolls[1],
           score: this.score(),
         };
       case 'SPARE':
         return {
-          firstRoll: this.rolls[0],
+          firstRoll: this.rolls[0]!,
           secondRoll: this.rolls[1],
           score: this.score(),
         };
@@ -84,14 +85,14 @@ export class ClassicFrame implements IFrame, IObservableFrame, IBonusFrame {
       case 'NOT_FINISHED':
         return 'WAITING_ON_NEXT_ROLLS';
       case 'CLASSIC':
-        return this.rolls[0] + this.rolls[1];
+        return this.rolls[0]! + this.rolls[1]!;
       case 'SPARE':
         return Number.isInteger(this.bonusRolls[0])
-          ? this.rolls[0] + this.rolls[1] + this.bonusRolls[0]
+          ? this.rolls[0]! + this.rolls[1]! + this.bonusRolls[0]!
           : 'WAITING_ON_NEXT_ROLLS';
       case 'STRIKE':
         return Number.isInteger(this.bonusRolls[0]) && Number.isInteger(this.bonusRolls[1])
-          ? this.rolls[0] + this.bonusRolls[0] + this.bonusRolls[1]
+          ? this.rolls[0]! + this.bonusRolls[0]! + this.bonusRolls[1]!
           : 'WAITING_ON_NEXT_ROLLS';
     }
   }
@@ -113,7 +114,7 @@ export class ClassicFrame implements IFrame, IObservableFrame, IBonusFrame {
   private handleNotFinished(pinsDown: number) {
     this.rolls.push(pinsDown);
 
-    if (this.isSpare({ currentRoll: pinsDown, previousRoll: this.rolls[0] })) {
+    if (this.isSpare({ currentRoll: pinsDown, previousRoll: this.rolls[0]! })) {
       this.state = 'SPARE';
       this.bonusRollsNeeded = 1;
       this.notifyCompleted();

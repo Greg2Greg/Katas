@@ -1,5 +1,5 @@
 export interface Inputer {
-  read(): Promise<number | 'NOT_A_VALID_NUMBER'>;
+  read(): Promise<number | 'NOT_A_VALID_NUMBER' | null>;
 }
 
 export interface Outputer {

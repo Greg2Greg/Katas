@@ -36,7 +36,7 @@
   
       /* Type Checking */
       "noImplicitAny": true,
-      "strictNullChecks": false,
+      "strictNullChecks": true,
       "strictFunctionTypes": true,
       "strictBindCallApply": true,
       "noImplicitThis": true,
