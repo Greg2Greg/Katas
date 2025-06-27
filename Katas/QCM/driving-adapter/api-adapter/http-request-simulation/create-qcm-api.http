@@ -1,0 +1,42 @@
+POST http://127.0.0.1:3000/create-qcm HTTP/1.1
+content-type: application/json
+
+{
+    "id": "randomId",
+    "questions": [
+        {
+            "title": "Quelle est la capitale de la France ?",
+            "answersProposed": [
+                {
+                    "title": "Paris",
+                    "isCorrect": true
+                },
+                                {
+                    "title": "Berlin",
+                    "isCorrect": false
+                },
+                                {
+                    "title": "Canberra",
+                    "isCorrect": false
+                }
+            ]
+        },
+        {
+            "title": "Quelle est la capitale de l'Allemagne ?",
+            "answersProposed": [
+                {
+                    "title": "Berlin",
+                    "isCorrect": true
+                },
+                                {
+                    "title": "Paris",
+                    "isCorrect": false
+                },
+                                {
+                    "title": "Canberra",
+                    "isCorrect": false
+                }
+            ]
+        }
+    ]
+}
