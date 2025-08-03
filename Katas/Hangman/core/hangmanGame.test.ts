@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { InmemoryInputer } from '../infra/inputer/inmemoryInputer.ts';
 import { InmemoryOutputer } from '../infra/outputer/inmemoryOutputer.ts';
 import { HangmanGame } from './hangman.ts';

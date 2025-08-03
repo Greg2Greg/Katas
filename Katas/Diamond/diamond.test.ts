@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { Diamond } from './diamond.ts';
 
 describe('Diamond test', () => {

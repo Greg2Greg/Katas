@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { HangmanGuesser } from './hangmanGuesser.ts';
 
 describe('HangmanGuesser', () => {

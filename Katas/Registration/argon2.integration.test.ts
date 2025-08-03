@@ -1,3 +1,4 @@
+import { describe, test, expect } from 'vitest';
 import { Argon2PasswordHasher } from './registration.ts';
 
 describe('Argon2', () => {

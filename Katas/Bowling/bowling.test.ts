@@ -1,3 +1,4 @@
+import { describe, beforeEach, it, expect } from 'vitest';
 import { BowlingGameV2 } from './BowlingGameV2/bowlingGameV2.ts';
 
 function rollMany(

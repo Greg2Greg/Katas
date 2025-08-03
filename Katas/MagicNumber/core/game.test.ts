@@ -1,3 +1,4 @@
+import { describe, test, expect, vi } from 'vitest';
 import { InmemoryInputer } from '../infra/inputer/inmemoryInputer.ts';
 import { ConsoleOutputer } from '../infra/outputer/consoleOutputer.ts';
 import { StubRandomNumberGenerator } from '../infra/randomNumberGenerator/stubRandomNumberGenerator.ts';
@@ -16,7 +17,7 @@ describe('Magic number', () => {
     const outputer = new ConsoleOutputer();
     const randomGenerator = new StubRandomNumberGenerator(40);
     const game = new Game(inputer, outputer, randomGenerator);
-    const outputerLogSpy = jest.spyOn(outputer, 'log');
+    const outputerLogSpy = vi.spyOn(outputer, 'log');
 
     await game.start();
     expect(outputerLogSpy).toHaveBeenCalledWith('CORRECT');
@@ -27,7 +28,7 @@ describe('Magic number', () => {
     const outputer = new ConsoleOutputer();
     const randomGenerator = new StubRandomNumberGenerator(40);
     const game = new Game(inputer, outputer, randomGenerator);
-    const outputerLogSpy = jest.spyOn(outputer, 'log');
+    const outputerLogSpy = vi.spyOn(outputer, 'log');
 
     await game.start();
 
@@ -43,7 +44,7 @@ test('Should display too many attemps', async () => {
   const outputer = new ConsoleOutputer();
   const randomGenerator = new StubRandomNumberGenerator(40);
   const game = new Game(inputer, outputer, randomGenerator);
-  const outputerLogSpy = jest.spyOn(outputer, 'log');
+  const outputerLogSpy = vi.spyOn(outputer, 'log');
 
   await game.start();
 
@@ -56,7 +57,7 @@ test('Should display too many attemps', async () => {
 });
 
 function expectToBeCalledTimesWith(input: {
-  spy: jest.SpyInstance;
+  spy: vi.SpyInstance;
   expectedValue: unknown;
   expectedTimesToBeCalled: number;
 }) {

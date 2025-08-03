@@ -1,9 +1,11 @@
+import { it, expect } from 'vitest';
+import { describe } from 'node:test';
 import { Diamond } from './diamond.ts';
 
-xdescribe('Diamond test', () => {
+describe('Diamond test', () => {
   // On considère que Diamant de A c'est juste A
   // Je laisse ce test pour conserver le raisonnement
-  it('Diamond of A', () => {
+  it.skip('Diamond of A', () => {
     expect(new Diamond().of('A')).toEqual(['A']);
   });
 
@@ -29,10 +31,10 @@ xdescribe('Diamond test', () => {
     de sous-problème, on peut vérifie si ça match bien avec le problème
     dans son ensemble.
   */
-  it('Lineof A', () => {
+  it.skip('Lineof A', () => {
     expect(new Diamond().lineOf('A')).toBe('A');
   });
-  it('Lineof B', () => {
+  it.skip('Lineof B', () => {
     expect(new Diamond().lineOf('B')).toBe('B B');
   });
 
@@ -49,7 +51,7 @@ xdescribe('Diamond test', () => {
     l'implémente juste une fois pour voir s'il n'y a pas déjà quelque
     chose qui cloche.
   */
-  xit('Diamond of B', () => {
+  it.skip('Diamond of B', () => {
     expect(new Diamond().of('B')).toBe([' A ', 'B B', ' A ']);
   });
   /*
@@ -67,7 +69,7 @@ xdescribe('Diamond test', () => {
 
 
    */
-  it('Lineof C', () => {
+  it.skip('Lineof C', () => {
     expect(new Diamond().lineOf('C')).toBe('C  C');
   });
 });

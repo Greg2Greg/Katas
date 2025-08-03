@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { RomanNumeralsV2 } from './romanNumeralsV2.ts';
 
 const romanNumerals = new RomanNumeralsV2();

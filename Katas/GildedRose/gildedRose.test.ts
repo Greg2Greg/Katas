@@ -1,3 +1,4 @@
+import { describe, it, expect } from 'vitest';
 import { GildedRose } from './gildedRose.ts';
 import { Item } from './item/item.ts';
 
