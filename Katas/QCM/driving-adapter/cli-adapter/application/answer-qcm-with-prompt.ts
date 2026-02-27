@@ -1,43 +1,59 @@
-import { AnswerQcm } from '../../../application/answer-qcm.ts';
-import { QcmRepository } from '../../../application/port/qcm-repository.ts';
-import { AnsweredQcm } from '../../../domain/model/qcm.ts';
-import { AnswerPrompt } from './ports/answer-prompt.ts';
+import { AnswerQcmInput } from '../../../application/answer-qcm.usecase.ts';
+import { QcmRepository } from '../../../application/port/qcm.repository.ts';
+import { Qcm } from '../../../domain/entity/qcm/qcm.entity.ts';
+import { validateAnswerQcmInput } from '../../../shared/schema/answer-qcm.validator.ts';
+import { AnswerPromptAdapter } from './ports/answer-prompt.adapter.ts';
 
 export class AnswerQcmWithPrompt {
   private readonly qcmRepository: QcmRepository;
-  private readonly answerPrompt: AnswerPrompt;
-  private readonly answerQcm: AnswerQcm;
+  private readonly answerPromptAdapter: AnswerPromptAdapter;
 
-  constructor(dependencies: {
-    qcmRepository: QcmRepository;
-    answerPrompt: AnswerPrompt;
-    answerQcm: AnswerQcm;
-  }) {
+  constructor(dependencies: { qcmRepository: QcmRepository; answerPromptAdapter: AnswerPromptAdapter }) {
     this.qcmRepository = dependencies.qcmRepository;
-    this.answerPrompt = dependencies.answerPrompt;
-    this.answerQcm = dependencies.answerQcm;
+    this.answerPromptAdapter = dependencies.answerPromptAdapter;
   }
 
-  async execute(input: { qcmId: string }): Promise<void> {
+  async execute(input: { qcmId: string }): Promise<AnswerQcmInput> {
     const { qcmId } = input;
 
+    const qcm = await this.findQcmById(qcmId);
+    const unsafeAnswers = await this.retrieveAnswers(qcm);
+    const answers = validateAnswerQcmInput({ answers: unsafeAnswers, qcmId });
+    return { answersDto: answers.answers, qcmId: answers.qcmId };
+  }
+
+  private async retrieveAnswers(qcm: Qcm) {
+    const answersDto = new Array<{ questionTitle: string; answers: string[] }>();
+    const questions = qcm.serialize().questions;
+    for await (const question of questions) {
+      const { answersProposed, title } = question;
+      const answerRetrieved = await this.answerPromptAdapter.retrieveAnswer({
+        answersProposed,
+        title,
+      });
+
+      if (!answerRetrieved) {
+        throw new Error('No answer retrieved');
+      }
+
+      answersDto.push({ questionTitle: title, answers: answerRetrieved });
+    }
+    return answersDto;
+  }
+
+  /*
+    Je ne pense pas que les principes clean archi m'autorise à
+    utiliser le qcmRepository ici. Je pense qu' il faudrait un 
+    endpoint GET qcm/:id. En plus ça me permettrait de récupérer
+    un qcmDto
+  */
+  private async findQcmById(qcmId: string): Promise<Qcm> {
     const qcm = await this.qcmRepository.findById(qcmId);
 
     if (!qcm) {
       throw new Error('This QCM doesnt exist');
     }
 
-    const answeredQcm = new Array<AnsweredQcm>();
-    for await (const question of qcm.questions) {
-      const answerRetrieved = await this.answerPrompt.retrieveAnswer(question);
-
-      if (!answerRetrieved) {
-        throw new Error('No answer retrieved');
-      }
-
-      answeredQcm.push({ question: question, givenAnswers: answerRetrieved });
-    }
-
-    await this.answerQcm.execute({ answeredQcm });
+    return qcm;
   }
 }

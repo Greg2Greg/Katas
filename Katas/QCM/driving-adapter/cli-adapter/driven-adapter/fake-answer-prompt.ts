@@ -1,7 +1,7 @@
-import { AnswerPrompt } from '../application/ports/answer-prompt.ts';
+import { AnswerPromptAdapter } from '../application/ports/answer-prompt.adapter.ts';
 
-export class FakeAnswerPrompt implements AnswerPrompt {
-  constructor(private readonly answers: string[]) {}
+export class FakeAnswerPrompt implements AnswerPromptAdapter {
+  answers: string[];
 
   async retrieveAnswer(): Promise<string[] | null> {
     const answers = this.answers.shift();
@@ -10,7 +10,7 @@ export class FakeAnswerPrompt implements AnswerPrompt {
       return null;
     }
 
-    const answersAsArray = answers.split(' ');
+    const answersAsArray = answers.split(';');
     return answersAsArray;
   }
 }

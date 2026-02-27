@@ -1,9 +1,9 @@
 import inquirer from 'inquirer';
-import { AnswerPrompt } from '../application/ports/answer-prompt.ts';
-import { Question } from '../../../domain/model/qcm.ts';
+import { QuestionDto } from '../../../domain/value-object/question/question-type.ts';
+import { AnswerPromptAdapter } from '../application/ports/answer-prompt.adapter.ts';
 
-export class InquirerAnswerPrompt implements AnswerPrompt {
-  async retrieveAnswer(question: Question): Promise<string[] | null> {
+export class InquirerAnswerPrompt implements AnswerPromptAdapter {
+  async retrieveAnswer(question: QuestionDto): Promise<string[] | null> {
     const answersProposed = question.answersProposed.map((answerProposed) => answerProposed.title);
 
     const { answer }: { answer: string[] } = await inquirer.prompt([

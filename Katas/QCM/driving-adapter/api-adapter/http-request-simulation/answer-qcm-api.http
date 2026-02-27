@@ -1,49 +1,16 @@
 POST http://127.0.0.1:3000/answer-qcm HTTP/1.1
 content-type: application/json
 
-[
-  {
-    "question": {
-      "title": "Quelle est la capitale de la France ?",
-      "answersProposed": [
-        {
-          "title": "Paris",
-          "isCorrect": true
-        },
-        {
-          "title": "Berlin",
-          "isCorrect": false
-        },
-        {
-          "title": "Canberra",
-          "isCorrect": false
-        }
-      ]
+{
+  "qcmId": "d69728b2-ebea-43bc-970f-a5315ec18de5",
+  "answers": [
+    {
+      "questionTitle": "Quelle est la capitale de la France ?",
+      "answers": ["Paris"]
     },
-    "givenAnswers": [
-      "Paris"
-    ]
-  },
-  {
-    "question": {
-      "title": "Quelle est la capitale de l'Allemagne ?",
-      "answersProposed": [
-        {
-          "title": "Berlin",
-          "isCorrect": true
-        },
-        {
-          "title": "Paris",
-          "isCorrect": false
-        },
-        {
-          "title": "Canberra",
-          "isCorrect": false
-        }
-      ]
-    },
-    "givenAnswers": [
-      "Berlin"
-    ]
-  }
-]
+    {
+      "questionTitle": "Quelle est la capitale de l'Allemagne ?",
+      "answers": ["Berlin"]
+    }
+  ]
+}

@@ -1,10 +1,9 @@
-import { AnswerProposed, Question } from '../../../domain/model/qcm.ts';
-import { QuestionPrompt } from '../application/ports/question-prompt.ts';
+import { AnswerProposedDto, QuestionDto } from '../../../domain/value-object/question/question-type.ts';
+import { QuestionPromptAdapter } from '../application/ports/question-prompt.adapter.ts';
 
-export class FakeQuestionPrompt implements QuestionPrompt {
-  private currentQuestion: Question | null = null;
-
-  constructor(private readonly questions: Question[]) {}
+export class FakeQuestionPrompt implements QuestionPromptAdapter {
+  private currentQuestion: QuestionDto | null = null;
+  questions: QuestionDto[];
 
   async nextQuestion(): Promise<string | null> {
     if (!this.questions || this.questions.length === 0) {
@@ -21,9 +20,9 @@ export class FakeQuestionPrompt implements QuestionPrompt {
     return question.title;
   }
 
-  async nextAnswer(): Promise<AnswerProposed | null> {
+  async nextAnswerProposed(): Promise<AnswerProposedDto | null> {
     if (!this.currentQuestion) {
-      throw new Error('There is nor current question');
+      throw new Error('There is no current question');
     }
 
     const answer = this.currentQuestion.answersProposed.shift();

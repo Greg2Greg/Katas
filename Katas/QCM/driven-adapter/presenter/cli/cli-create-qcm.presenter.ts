@@ -1,12 +1,12 @@
-import { CreateQcmPresenter } from '../../../application/port/create-qcm-presenter.ts';
-import { Qcm } from '../../../domain/model/qcm.ts';
+import { CreateQcmPresenter } from '../../../application/port/create-qcm.presenter.ts';
+import { QcmDto } from '../../../domain/entity/qcm/qcm-type.ts';
 
 export class CliCreateQcmPresenter implements CreateQcmPresenter {
-  present(qcm: Qcm): void {
-    console.log(`QCM Created: ${qcm}`);
+  present(qcmDto: QcmDto): void {
+    console.log(`QCM Created: ${JSON.stringify(qcmDto)}`);
   }
 
-  presentError(): void {
-    console.log('Error: qcm has not been created');
+  presentError(message: string): void {
+    console.log(message);
   }
 }

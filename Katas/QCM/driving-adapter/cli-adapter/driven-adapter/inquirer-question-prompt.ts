@@ -1,12 +1,12 @@
 import inquirer from 'inquirer';
-import { AnswerProposed } from '../../../domain/model/qcm.ts';
-import { QuestionPrompt } from '../application/ports/question-prompt.ts';
+import { QuestionPromptAdapter } from '../application/ports/question-prompt.adapter.ts';
+import { AnswerProposedDto } from '../../../domain/value-object/question/question-type.ts';
 
 /*
     Partie de code plus compliqué à tester ici. Il faut tester
     directement via la cli.
 */
-export class InquirerQuestionPrompt implements QuestionPrompt {
+export class InquirerQuestionPrompt implements QuestionPromptAdapter {
   async nextQuestion(): Promise<string | null> {
     const { question }: { question: string } = await inquirer.prompt([
       {
@@ -23,7 +23,7 @@ export class InquirerQuestionPrompt implements QuestionPrompt {
     return question as string;
   }
 
-  async nextAnswer(): Promise<AnswerProposed | null> {
+  async nextAnswerProposed(): Promise<AnswerProposedDto | null> {
     const { answer }: { answer: string } = await inquirer.prompt([
       {
         type: 'input',
@@ -46,9 +46,5 @@ export class InquirerQuestionPrompt implements QuestionPrompt {
     ]);
 
     return { title: answer as string, isCorrect: !!isCorrect };
-  }
-
-  async answerQuestion(): Promise<void> {
-    throw new Error('Method not implemented.');
   }
 }

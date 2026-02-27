@@ -1,47 +1,42 @@
 /* eslint-disable no-constant-condition */
-
-import { CreateQcm } from '../../../application/create-qcm.ts';
-import { UuidProvider } from '../../../shared/provider/uuid/uuid-provider.ts';
-import { Question, Qcm, AnswerProposed } from '../../../domain/model/qcm.ts';
-import { QuestionPrompt } from './ports/question-prompt.ts';
+import { CreateQcmInput } from '../../../application/create-qcm.usecase.ts';
+import { QuestionDto } from '../../../domain/value-object/question/question-type.ts';
+import { validateCreateQcmInput } from '../../../shared/schema/create-qcm.validator.ts';
+import { QuestionPromptAdapter } from './ports/question-prompt.adapter.ts';
 
 export class ComposeQcmWithPrompt {
-  private readonly questionPrompt: QuestionPrompt;
-  private readonly uuidProvider: UuidProvider;
-  private readonly createQcm: CreateQcm;
-  private readonly _questions = new Array<Question>();
+  private readonly questionPromptAdapter: QuestionPromptAdapter;
 
-  constructor(dependencies: {
-    questionPrompt: QuestionPrompt;
-    uuidProvider: UuidProvider;
-    createQcm: CreateQcm;
-  }) {
-    this.questionPrompt = dependencies.questionPrompt;
-    this.uuidProvider = dependencies.uuidProvider;
-    this.createQcm = dependencies.createQcm;
+  constructor(dependencies: { questionPromptAdapter: QuestionPromptAdapter }) {
+    this.questionPromptAdapter = dependencies.questionPromptAdapter;
   }
 
-  async execute() {
+  async execute(): Promise<CreateQcmInput> {
+    const unsafeQuestions = await this.retrieveQuestions();
+    const questionsDto = validateCreateQcmInput(unsafeQuestions);
+    return { questionsDto };
+  }
+
+  private async retrieveQuestions(): Promise<QuestionDto[]> {
+    const questions = new Array<QuestionDto>();
     while (true) {
-      const questionTitle = await this.questionPrompt.nextQuestion();
+      const questionTitle = await this.questionPromptAdapter.nextQuestion();
       if (!questionTitle) {
         break;
       }
 
-      const answersProposed: AnswerProposed[] = [];
+      const answersProposed: { title: string; isCorrect: boolean }[] = [];
       while (true) {
-        const answer = await this.questionPrompt.nextAnswer();
+        const answer = await this.questionPromptAdapter.nextAnswerProposed();
         if (!answer) {
           break;
         }
 
         answersProposed.push(answer);
       }
-      this._questions.push({ title: questionTitle, answersProposed });
+      questions.push({ title: questionTitle, answersProposed });
     }
 
-    const id = this.uuidProvider.generate();
-    const qcm: Qcm = { id, questions: this._questions };
-    await this.createQcm.execute({ qcm });
+    return questions;
   }
 }
