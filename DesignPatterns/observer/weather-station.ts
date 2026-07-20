@@ -14,6 +14,7 @@ export class NaiveWeatherStation implements WeatherStationPublisher {
     this.subscribers.add(subscriber);
   }
 
+  // Unsubscribe with reference equality, so be careful to instanciate the subscriber and not use anonymoous function
   unsubscribe(subscriber: WeatherStationSubscriber): void {
     this.subscribers.delete(subscriber);
   }
