@@ -26,6 +26,7 @@
     "arktype": "^2.1.20",
     "commander": "^14.0.0",
     "effect": "^3.21.0",
+    "fast-check": "^4.9.0",
     "fastify": "^5.3.3",
     "hono": "^4.8.3",
     "inquirer": "^12.6.3",
